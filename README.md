@@ -73,6 +73,59 @@ A conferência parte de `saldos_iniciais` e usa `LEFT JOIN` com `contagens_fisic
 
 A contagem zero do Depósito Norte está incluída nas 458 preenchidas. Os 22 campos em branco ficam pendentes de contagem.
 
+## Conciliação em SQL e validações executadas
+
+O arquivo [analise.sql](analise.sql) contém seis consultas independentes de leitura. No DBeaver, execute cada instrução completa, incluindo o bloco `WITH`. A primeira gera a conciliação detalhada. As demais conferem as classificações, a unicidade, os indicadores por depósito, os três lançamentos de fronteira e o item com saldo zero.
+
+A análise usa o saldo inicial e os movimentos registrados entre a abertura de cada par e 30/09/2026 às 18h, inclusive. Entradas somam e saídas subtraem. As junções preservam os pares sem movimento ou sem contagem. A diferença é quantidade contada menos saldo esperado. Cada linha inclui o código da folha para rastrear a contagem física.
+
+### Resultados observados no banco local
+
+A consulta retornou **480 linhas e 480 pares distintos**, sem duplicação da unidade de análise. As classificações reconciliaram com a população inicial, com diferença zero.
+
+| Resultado | Pares |
+| --- | ---: |
+| Conforme | 385 |
+| Falta | 40 |
+| Sobra | 33 |
+| Sem contagem registrada | 22 |
+| **Total** | **480** |
+
+| Depósito | Escopo | Divergências | Taxa de divergência | Pendentes | Taxa de pendência |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Norte | 240 | 37 | 15,42% | 11 | 4,58% |
+| Sul | 240 | 36 | 15,00% | 11 | 4,58% |
+| **Total** | **480** | **73** | **15,21%** | **22** | **4,58%** |
+
+As taxas usam todos os pares no escopo do respectivo depósito como denominador. As 73 divergências abrangem faltas e sobras. A taxa de pendência representa os campos de contagem em branco.
+
+### Testes de corte e saldo zero
+
+- `MOV-036001`, entrada de 7 unidades registrada exatamente às 18h, foi incluída.
+- `MOV-036002`, entrada de 9 unidades ocorrida às 17h59 e registrada às 18h01, ficou fora do saldo registrado no corte. É um exemplo para investigar o atraso de lançamento com documentos de origem.
+- `MOV-036003`, saída de 4 unidades ocorrida às 18h01 e registrada às 18h02, ficou fora do corte.
+- `MAT-0001` no Depósito Norte permaneceu no resultado com saldo esperado zero, contagem zero e classificação conforme.
+
+### Conclusão desta etapa
+
+Foram identificadas **73 divergências quantitativas e 22 contagens pendentes** na simulação. O Depósito Norte apresentou uma divergência a mais que o Sul, com a mesma população de 240 pares. As consultas identificam os casos para investigação. A causa das diferenças e a necessidade de ajuste dependeriam de recontagem e documentação dos movimentos. Os testes de corte e a reconciliação das classificações foram concluídos. A investigação de dois casos é a próxima etapa.
+
+## Evidências da execução no DBeaver
+
+As capturas abaixo foram registradas em 18/11/2026 e estão relacionadas na ordem enviada.
+
+| Ordem | Evidência | Resultado visível |
+| --- | --- | --- |
+| 1 | [Conciliação detalhada](evidencias/01-conciliacao-detalhada.png) | Exibe a consulta e parte dos saldos e contagens. A grade indica 200 linhas recuperadas nessa visualização. |
+| 2 | [Classificações](evidencias/02-classificacoes.png) | 385 conformes, 40 faltas, 33 sobras e 22 sem contagem registrada. |
+| 3 | [Unicidade e população](evidencias/03-unicidade-populacao.png) | 480 linhas e 480 pares distintos. |
+| 4 | [Repetição da validação de unicidade](evidencias/04-unicidade-populacao-repeticao.png) | Repete a captura anterior com os mesmos totais. |
+| 5 | [Indicadores por depósito](evidencias/05-indicadores-deposito.png) | Norte com 37 divergências (15,42%) e Sul com 36 (15,00%). Ambos têm 11 pendências (4,58%) em 240 pares. |
+| 6 | [Fronteira do corte](evidencias/06-fronteira-corte.png) | MOV-036001 incluído. MOV-036002 e MOV-036003 fora do corte. |
+| 7 | [Controle de saldo zero](evidencias/07-saldo-zero.png) | MAT-0001 no Norte com saldo inicial, movimento líquido, saldo esperado e quantidade contada iguais a zero. |
+
+A captura 3 confirma o total de 480 pares da conciliação. A captura 1 mostra a parcela carregada na grade. As classificações da captura 2 somam a mesma população e os indicadores da captura 5 reconciliam com 73 divergências e 22 pendências.
+
 ## Checklist
 
 - [x] Definir objetivo, riscos, escopo e data de corte.
@@ -80,9 +133,9 @@ A contagem zero do Depósito Norte está incluída nas 458 preenchidas. Os 22 ca
 - [x] Gerar a base SQLite com lançamentos próximos ao corte.
 - [x] Gerar o caderno de contagem e sua transcrição rastreável.
 - [x] Mapear as chaves do modelo e conferir a população.
-- [ ] Escrever a conciliação em SQL, mantendo uma linha por material e depósito.
-- [ ] Testar os lançamentos de fronteira em SQL e reconciliar as classificações com as 480 combinações no escopo.
-- [ ] Organizar as consultas de conciliação, reconciliação, indicadores e investigação em um script SQL reproduzível.
+- [x] Escrever a conciliação em SQL, mantendo uma linha por material e depósito.
+- [x] Testar os lançamentos de fronteira em SQL e reconciliar as classificações com as 480 combinações no escopo.
+- [x] Organizar as consultas de conciliação, reconciliação e indicadores em um script SQL reproduzível.
 - [ ] Comparar as taxas de divergência e de contagem pendente por depósito usando SQL e investigar dois casos.
 - [ ] Exportar pelo DBeaver o resultado da consulta de conciliação em JSON. Incluir depósito, material, classificação, saldo esperado, quantidade contada, diferença e código da folha.
 - [ ] Criar o painel no Lovable a partir do JSON, com cartões para itens no escopo, divergências e contagens pendentes. Incluir filtros por depósito e classificação e exibir o código da folha na tabela.
