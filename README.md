@@ -75,7 +75,7 @@ A contagem zero do Depósito Norte está incluída nas 458 preenchidas. Os 22 ca
 
 ## Conciliação em SQL e validações executadas
 
-O arquivo [analise.sql](analise.sql) contém oito consultas independentes de leitura. No DBeaver, execute cada instrução completa, incluindo seu bloco `WITH`, quando houver. A primeira gera a conciliação detalhada. As demais conferem as classificações, a unicidade, os indicadores por depósito, os três lançamentos de fronteira, o item com saldo zero e os dois casos selecionados com suas movimentações.
+O arquivo [analise.sql](Evidências/Análise/analise.sql) contém oito consultas independentes de leitura. No DBeaver, execute cada instrução completa, incluindo seu bloco `WITH`, quando houver. A primeira gera a conciliação detalhada. As demais conferem as classificações, a unicidade, os indicadores por depósito, os três lançamentos de fronteira, o item com saldo zero e os dois casos selecionados com suas movimentações.
 
 A análise usa o saldo inicial e os movimentos registrados entre a abertura de cada par e 30/09/2026 às 18h, inclusive. Entradas somam e saídas subtraem. As junções preservam os pares sem movimento ou sem contagem. A diferença é quantidade contada menos saldo esperado. Cada linha inclui o código da folha para rastrear a contagem física.
 
