@@ -6,7 +6,7 @@
 
 O projeto simula um inventário da Horizonte Suprimentos. O objetivo é verificar se o saldo registrado no ERP na data de corte coincide com a contagem física feita nos depósitos. O SQL será usado para reconstruir os saldos e classificar as diferenças. O Python executará a análise e exportará as exceções e os indicadores por depósito.
 
-[Norma interna](norma-interna-inventario.md) · [Base do ERP](base.sql) · [Caderno de contagem em PDF](output/pdf/caderno-contagem-estoque.pdf) · [Transcrição da contagem](contagem-fisica.sql)
+[Norma interna](norma-interna-inventario.md) · [Base do ERP](base.sql) · [Caderno de contagem em PDF](Material%20de%20Contagem/caderno-contagem-estoque.pdf) · [Transcrição da contagem](contagem-fisica.sql)
 
 ## Objetivo e escopo
 
@@ -59,13 +59,27 @@ O resultado esperado é **35.928 movimentos, 480 linhas do caderno e 458 contage
 | Sem contagem registrada | 22 |
 | **Total no escopo** | **480** |
 
+## Validação das chaves e da população
+
+O par `(material_id, deposito_id)` é a chave primária de `saldos_iniciais` e `contagens_fisicas`. Em `movimentacoes` e `contagens_fisicas`, as duas colunas formam uma chave estrangeira composta que referencia `saldos_iniciais`. No primeiro print, o resultado de `PRAGMA foreign_key_list('movimentacoes')` mostra as duas colunas com o mesmo `id` e posições `seq` 0 e 1. [Evidência das chaves no DBeaver](evidencias/validacao-chaves.png)
+
+A conferência parte de `saldos_iniciais` e usa `LEFT JOIN` com `contagens_fisicas` pelas duas colunas da chave. Isso preserva os pares no escopo e permite distinguir uma linha ausente de um campo em branco. [Evidência da população no DBeaver](evidencias/validacao-populacao.png)
+
+| Depósito | No escopo | Linhas no caderno | Preenchidas | Sem linha | Em branco | Contadas como zero |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Norte | 240 | 240 | 229 | 0 | 11 | 1 |
+| Sul | 240 | 240 | 229 | 0 | 11 | 0 |
+| **Total** | **480** | **480** | **458** | **0** | **22** | **1** |
+
+A contagem zero do Depósito Norte está incluída nas 458 preenchidas. Os 22 campos em branco ficam pendentes de contagem.
+
 ## Checklist
 
 - [x] Definir objetivo, riscos, escopo e data de corte.
 - [x] Documentar o critério de inventário na norma fictícia.
 - [x] Gerar a base SQLite com lançamentos próximos ao corte.
 - [x] Gerar o caderno de contagem e sua transcrição rastreável.
-- [ ] Mapear as chaves do modelo e conferir a população.
+- [x] Mapear as chaves do modelo e conferir a população.
 - [ ] Escrever a conciliação em SQL, mantendo uma linha por material e depósito.
 - [ ] Testar os lançamentos de fronteira e reconciliar as classificações.
 - [ ] Automatizar a execução da consulta SQL com Python e exportar os resultados em JSON. Incluir depósito, material, classificação, saldo esperado, quantidade contada, diferença e código da folha.
