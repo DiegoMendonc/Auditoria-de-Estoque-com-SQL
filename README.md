@@ -116,13 +116,13 @@ As capturas abaixo foram registradas em 18/11/2026 e estão relacionadas na orde
 
 | Ordem | Evidência | Resultado visível |
 | --- | --- | --- |
-| 1 | [Conciliação detalhada](evidencias/01-conciliacao-detalhada.png) | Exibe a consulta e parte dos saldos e contagens. A grade indica 200 linhas recuperadas nessa visualização. |
-| 2 | [Classificações](evidencias/02-classificacoes.png) | 385 conformes, 40 faltas, 33 sobras e 22 sem contagem registrada. |
-| 3 | [Unicidade e população](evidencias/03-unicidade-populacao.png) | 480 linhas e 480 pares distintos. |
-| 4 | [Repetição da validação de unicidade](evidencias/04-unicidade-populacao-repeticao.png) | Repete a captura anterior com os mesmos totais. |
-| 5 | [Indicadores por depósito](evidencias/05-indicadores-deposito.png) | Norte com 37 divergências (15,42%) e Sul com 36 (15,00%). Ambos têm 11 pendências (4,58%) em 240 pares. |
-| 6 | [Fronteira do corte](evidencias/06-fronteira-corte.png) | MOV-036001 incluído. MOV-036002 e MOV-036003 fora do corte. |
-| 7 | [Controle de saldo zero](evidencias/07-saldo-zero.png) | MAT-0001 no Norte com saldo inicial, movimento líquido, saldo esperado e quantidade contada iguais a zero. |
+| 1 | [Conciliação detalhada](Evidências/Validação/01-conciliacao-detalhada.png) | Exibe a consulta e parte dos saldos e contagens. A grade indica 200 linhas recuperadas nessa visualização. |
+| 2 | [Classificações](Evidências/Validação/02-classificacoes.png) | 385 conformes, 40 faltas, 33 sobras e 22 sem contagem registrada. |
+| 3 | [Unicidade e população](Evidências/Validação/03-unicidade-populacao.png) | 480 linhas e 480 pares distintos. |
+| 4 | [Repetição da validação de unicidade](Evidências/Validação/04-unicidade-populacao-repeticao.png) | Repete a captura anterior com os mesmos totais. |
+| 5 | [Indicadores por depósito](Evidências/Validação/05-indicadores-deposito.png) | Norte com 37 divergências (15,42%) e Sul com 36 (15,00%). Ambos têm 11 pendências (4,58%) em 240 pares. |
+| 6 | [Fronteira do corte](Evidências/Validação/06-fronteira-corte.png) | MOV-036001 incluído. MOV-036002 e MOV-036003 fora do corte. |
+| 7 | [Controle de saldo zero](Evidências/Validação/07-saldo-zero.png) | MAT-0001 no Norte com saldo inicial, movimento líquido, saldo esperado e quantidade contada iguais a zero. |
 
 A captura 3 confirma o total de 480 pares da conciliação. A captura 1 mostra a parcela carregada na grade. As classificações da captura 2 somam a mesma população e os indicadores da captura 5 reconciliam com 73 divergências e 22 pendências.
 
