@@ -75,7 +75,7 @@ A contagem zero do Depósito Norte está incluída nas 458 preenchidas. Os 22 ca
 
 ## Conciliação em SQL e validações executadas
 
-O arquivo [analise.sql](analise.sql) contém seis consultas independentes de leitura. No DBeaver, execute cada instrução completa, incluindo o bloco `WITH`. A primeira gera a conciliação detalhada. As demais conferem as classificações, a unicidade, os indicadores por depósito, os três lançamentos de fronteira e o item com saldo zero.
+O arquivo [analise.sql](analise.sql) contém oito consultas independentes de leitura. No DBeaver, execute cada instrução completa, incluindo seu bloco `WITH`, quando houver. A primeira gera a conciliação detalhada. As demais conferem as classificações, a unicidade, os indicadores por depósito, os três lançamentos de fronteira, o item com saldo zero e os dois casos selecionados com suas movimentações.
 
 A análise usa o saldo inicial e os movimentos registrados entre a abertura de cada par e 30/09/2026 às 18h, inclusive. Entradas somam e saídas subtraem. As junções preservam os pares sem movimento ou sem contagem. A diferença é quantidade contada menos saldo esperado. Cada linha inclui o código da folha para rastrear a contagem física.
 
@@ -123,8 +123,33 @@ As capturas abaixo foram registradas em 18/11/2026 e estão relacionadas na orde
 | 5 | [Indicadores por depósito](Evidências/Validação/05-indicadores-deposito.png) | Norte com 37 divergências (15,42%) e Sul com 36 (15,00%). Ambos têm 11 pendências (4,58%) em 240 pares. |
 | 6 | [Fronteira do corte](Evidências/Validação/06-fronteira-corte.png) | MOV-036001 incluído. MOV-036002 e MOV-036003 fora do corte. |
 | 7 | [Controle de saldo zero](Evidências/Validação/07-saldo-zero.png) | MAT-0001 no Norte com saldo inicial, movimento líquido, saldo esperado e quantidade contada iguais a zero. |
+| 8 | [Casos investigados — consulta 7](Evidências/Validação/08-casos-investigados.png) | MAT-0005 com saldo esperado de 403 e contagem em branco. MAT-0011 com saldo esperado de 607 e contagem de 604. |
+| 9 | [Movimentações dos casos — consulta 8](Evidências/Validação/09-movimentos-casos.png) | A grade indica 150 movimentos recuperados e mostra documentos, quantidades, horários e tratamento no corte. |
 
 A captura 3 confirma o total de 480 pares da conciliação. A captura 1 mostra a parcela carregada na grade. As classificações da captura 2 somam a mesma população e os indicadores da captura 5 reconciliam com 73 divergências e 22 pendências.
+
+## Investigação de dois casos
+
+Foram selecionados intencionalmente dois tipos de exceção no Depósito Norte, que teve 37 divergências. Ambos remetem à folha `INV-01-01`, primeira página do [caderno de contagem](caderno-contagem-estoque.pdf). A ficha mostra campo em branco para MAT-0005 e 604 unidades para MAT-0011. As consultas 7 e 8 do [analise.sql](Evidências/Análise/analise.sql) reproduzem a seleção e listam os movimentos para conferir quantidade e corte.
+
+| Caso | Saldo inicial | Movimento líquido no corte | Saldo esperado | Contagem | Diferença |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| MAT-0005, Norte | 474 | -71 | 403 | Em branco | Indeterminada |
+| MAT-0011, Norte | 660 | -53 | 607 | 604 | -3 |
+
+### MAT-0005 — contagem pendente
+
+Foram localizados 75 movimentos, dos quais 66 registrados até o corte. A ficha e a transcrição apresentam a quantidade em branco. A evidência disponível sustenta a pendência de contagem, com saldo sistêmico reconstruído de 403 unidades. A diferença quantitativa depende da realização ou recuperação da contagem.
+
+Solicitar a folha original revisada, o controle de conclusão do inventário e eventual ficha de recontagem independente. Esses registros permitiriam verificar se o item foi omitido na coleta ou se houve uma contagem posterior. A solicitação é simulada e a confirmação permanece pendente.
+
+### MAT-0011 — falta de três unidades
+
+Foram localizados 75 movimentos, dos quais 63 registrados até o corte. O saldo reconstruído é 607 unidades e a ficha registra 604. A diferença de -3 atende ao critério de falta da NOR-EST-001.
+
+Solicitar recontagem independente e comprovantes de entrada e saída próximos ao corte, com identificação do material, depósito, quantidade e horário. Para os dois casos, a base não apresentou eventos ocorridos até o corte e registrados depois. A investigação deve confrontar os registros com os documentos físicos e verificar a completude da extração.
+
+**Conclusão preliminar.** A diferença de três unidades foi confirmada entre os registros disponíveis. Sua causa e eventual ajuste dependem das evidências adicionais. O caso de MAT-0005 permanece pendente de quantidade física. Os dois casos ilustram a investigação e foram selecionados sem objetivo de projeção estatística para a população.
 
 ## Checklist
 
@@ -136,7 +161,7 @@ A captura 3 confirma o total de 480 pares da conciliação. A captura 1 mostra a
 - [x] Escrever a conciliação em SQL, mantendo uma linha por material e depósito.
 - [x] Testar os lançamentos de fronteira em SQL e reconciliar as classificações com as 480 combinações no escopo.
 - [x] Organizar as consultas de conciliação, reconciliação e indicadores em um script SQL reproduzível.
-- [ ] Comparar as taxas de divergência e de contagem pendente por depósito usando SQL e investigar dois casos.
+- [x] Comparar as taxas de divergência e de contagem pendente por depósito usando SQL e investigar dois casos, registrando as evidências adicionais a solicitar.
 - [ ] Exportar pelo DBeaver o resultado da consulta de conciliação em JSON. Incluir depósito, material, classificação, saldo esperado, quantidade contada, diferença e código da folha.
 - [ ] Criar o painel no Lovable a partir do JSON, com cartões para itens no escopo, divergências e contagens pendentes. Incluir filtros por depósito e classificação e exibir o código da folha na tabela.
 - [ ] Validar o painel sem filtros contra o SQLite. Os resultados esperados são **480 combinações no escopo, 73 divergências (40 faltas e 33 sobras) e 22 contagens pendentes**.
