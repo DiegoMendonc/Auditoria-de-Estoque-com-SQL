@@ -1,10 +1,10 @@
-# Auditoria de estoque com SQL e Python
+# Auditoria de estoque com SQL
 
 **Em construção** · Projeto de portfólio de auditoria interna com dados fictícios.
 
 ## Resumo executivo
 
-O projeto simula um inventário da Horizonte Suprimentos. O objetivo é verificar se o saldo registrado no ERP na data de corte coincide com a contagem física feita nos depósitos. O SQL será usado para reconstruir os saldos e classificar as diferenças. O Python executará a análise e exportará as exceções e os indicadores por depósito.
+O projeto simula um inventário da Horizonte Suprimentos. O objetivo é verificar se o saldo registrado no ERP na data de corte coincide com a contagem física feita nos depósitos. As consultas em SQL no SQLite serão usadas para reconstruir os saldos, classificar as diferenças, reconciliar os totais e calcular os indicadores por depósito. Os resultados poderão ser exportados pelo DBeaver em JSON para alimentar o painel no Lovable.
 
 [Norma interna](norma-interna-inventario.md) · [Base do ERP](base.sql) · [Caderno de contagem em PDF](Material%20de%20Contagem/caderno-contagem-estoque.pdf) · [Transcrição da contagem](contagem-fisica.sql)
 
@@ -81,12 +81,12 @@ A contagem zero do Depósito Norte está incluída nas 458 preenchidas. Os 22 ca
 - [x] Gerar o caderno de contagem e sua transcrição rastreável.
 - [x] Mapear as chaves do modelo e conferir a população.
 - [ ] Escrever a conciliação em SQL, mantendo uma linha por material e depósito.
-- [ ] Testar os lançamentos de fronteira e reconciliar as classificações.
-- [ ] Automatizar a execução da consulta SQL com Python e exportar os resultados em JSON. Incluir depósito, material, classificação, saldo esperado, quantidade contada, diferença e código da folha.
-- [ ] Comparar taxas de exceção por depósito e investigar dois casos.
+- [ ] Testar os lançamentos de fronteira em SQL e reconciliar as classificações com as 480 combinações no escopo.
+- [ ] Organizar as consultas de conciliação, reconciliação, indicadores e investigação em um script SQL reproduzível.
+- [ ] Comparar as taxas de divergência e de contagem pendente por depósito usando SQL e investigar dois casos.
+- [ ] Exportar pelo DBeaver o resultado da consulta de conciliação em JSON. Incluir depósito, material, classificação, saldo esperado, quantidade contada, diferença e código da folha.
 - [ ] Criar o painel no Lovable a partir do JSON, com cartões para itens no escopo, divergências e contagens pendentes. Incluir filtros por depósito e classificação e exibir o código da folha na tabela.
 - [ ] Validar o painel sem filtros contra o SQLite. Os resultados esperados são **480 combinações no escopo, 73 divergências (40 faltas e 33 sobras) e 22 contagens pendentes**.
 - [ ] Publicar o relatório, o painel e um resumo para o LinkedIn.
-- [ ] Como evolução opcional, criar uma API em Python que execute a mesma consulta em SQLite e devolva o mesmo formato JSON. Conectar o Lovable à API e conferir se os totais coincidem com os do painel alimentado pelo arquivo. Para um painel publicado, hospedar a API em um endereço HTTPS acessível ao aplicativo.
 
 As Normas Globais de Auditoria Interna do IIA orientam a estrutura do exercício, em especial objetivos e escopo (13.3), critérios (13.4), documentação (14.6) e comunicação final (15.1).
