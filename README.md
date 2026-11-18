@@ -61,9 +61,9 @@ O resultado esperado é **35.928 movimentos, 480 linhas do caderno e 458 contage
 
 ## Validação das chaves e da população
 
-O par `(material_id, deposito_id)` é a chave primária de `saldos_iniciais` e `contagens_fisicas`. Em `movimentacoes` e `contagens_fisicas`, as duas colunas formam uma chave estrangeira composta que referencia `saldos_iniciais`. No primeiro print, o resultado de `PRAGMA foreign_key_list('movimentacoes')` mostra as duas colunas com o mesmo `id` e posições `seq` 0 e 1. [Evidência das chaves no DBeaver](evidencias/validacao-chaves.png)
+O par `(material_id, deposito_id)` é a chave primária de `saldos_iniciais` e `contagens_fisicas`. Em `movimentacoes` e `contagens_fisicas`, as duas colunas formam uma chave estrangeira composta que referencia `saldos_iniciais`. No primeiro print, o resultado de `PRAGMA foreign_key_list('movimentacoes')` mostra as duas colunas com o mesmo `id` e posições `seq` 0 e 1. [Evidência das chaves no DBeaver](Evidências/Validação/validacao-chaves.png)
 
-A conferência parte de `saldos_iniciais` e usa `LEFT JOIN` com `contagens_fisicas` pelas duas colunas da chave. Isso preserva os pares no escopo e permite distinguir uma linha ausente de um campo em branco. [Evidência da população no DBeaver](evidencias/validacao-populacao.png)
+A conferência parte de `saldos_iniciais` e usa `LEFT JOIN` com `contagens_fisicas` pelas duas colunas da chave. Isso preserva os pares no escopo e permite distinguir uma linha ausente de um campo em branco. [Evidência da população no DBeaver](Evidências/Validação/validacao-populacao.png)
 
 | Depósito | No escopo | Linhas no caderno | Preenchidas | Sem linha | Em branco | Contadas como zero |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
