@@ -1,14 +1,20 @@
 # Auditoria de estoque com SQL
 
-**Em construção** · Projeto de portfólio de auditoria interna com dados fictícios.
+**Auditoria simulada concluída · Projeto e painel publicados** · Projeto de portfólio de auditoria interna com dados fictícios.
 
 ## Resumo executivo
 
-O projeto simula um inventário da Horizonte Suprimentos. O objetivo é verificar se o saldo registrado no ERP na data de corte coincide com a contagem física feita nos depósitos. As consultas em SQL no SQLite serão usadas para reconstruir os saldos, classificar as diferenças, reconciliar os totais e calcular os indicadores por depósito. Os resultados poderão ser exportados pelo DBeaver em JSON para alimentar o painel no Lovable.
+O projeto simula um inventário da Horizonte Suprimentos. O objetivo é verificar se o saldo registrado no ERP na data de corte coincide com a contagem física feita nos depósitos. As consultas em SQL no SQLite reconstruíram os saldos, classificaram as diferenças e reconciliaram os totais. Foram identificadas **73 divergências quantitativas e 22 contagens pendentes em 480 pares analisados**. Os resultados foram exportados em JSON para um painel interativo no Lovable.
 
-[Norma interna](norma-interna-inventario.md) · [Base do ERP](base.sql) · [Caderno de contagem em PDF](Material%20de%20Contagem/caderno-contagem-estoque.pdf) · [Transcrição da contagem](contagem-fisica.sql)
+[Norma interna](norma-interna-inventario.md) · [Base do ERP](base.sql) · [Caderno de contagem em PDF](https://github.com/DiegoMendonc/Auditoria-de-Estoque-com-SQL/blob/main/caderno-contagem-estoque.pdf) · [Transcrição da contagem](contagem-fisica.sql)
 
 ## Objetivo e escopo
+
+[Abrir painel interativo](https://horizonte-stock-compass.lovable.app/) · [Repositório no GitHub](https://github.com/DiegoMendonc/Auditoria-de-Estoque-com-SQL) · [Relatório final em PDF](Relatório%20Final/relatorio-auditoria-estoque.pdf)
+
+Para visualizar os indicadores no painel publicado, baixe [conciliacao-estoque.json](Evidências/Análise/conciliacao-estoque.json) e carregue-o pelo botão **Importar JSON**. Na verificação de acesso público, o aplicativo abriu com o estado de importação, aguardando o arquivo. Após carregar os dados, confira 480 pares, 385 conformes, 73 divergências e 22 pendências.
+
+![Resultados consolidados da auditoria de estoque](Evidências/Validação/11-painel-graficos.png)
 
 - **Risco avaliado** — saldos incorretos podem afetar o reabastecimento, a disponibilidade de materiais e os registros de estoque.
 - **População** — 480 combinações de material e depósito, incluindo saldo zero. Cada combinação representa uma unidade de análise.
@@ -49,7 +55,7 @@ SELECT
 FROM contagens_fisicas;
 ```
 
-O resultado esperado é **35.928 movimentos, 480 linhas do caderno e 458 contagens preenchidas**. Use estes totais de referência para validar a futura conciliação.
+O resultado esperado é **35.928 movimentos, 480 linhas do caderno e 458 contagens preenchidas**. Use estes totais de referência para conferir a conciliação.
 
 | Classificação | Combinações |
 | --- | ---: |
@@ -108,7 +114,7 @@ As taxas usam todos os pares no escopo do respectivo depósito como denominador.
 
 ### Conclusão desta etapa
 
-Foram identificadas **73 divergências quantitativas e 22 contagens pendentes** na simulação. O Depósito Norte apresentou uma divergência a mais que o Sul, com a mesma população de 240 pares. As consultas identificam os casos para investigação. A causa das diferenças e a necessidade de ajuste dependeriam de recontagem e documentação dos movimentos. Os testes de corte e a reconciliação das classificações foram concluídos. A investigação de dois casos é a próxima etapa.
+Foram identificadas **73 divergências quantitativas e 22 contagens pendentes** na simulação. O Depósito Norte apresentou uma divergência a mais que o Sul, com a mesma população de 240 pares. As consultas identificam os casos para investigação. A causa das diferenças e a necessidade de ajuste dependeriam de recontagem e documentação dos movimentos. Os testes de corte e a reconciliação das classificações foram concluídos. A investigação de dois casos está documentada na seção correspondente.
 
 ## Evidências da execução no DBeaver
 
@@ -130,7 +136,7 @@ A captura 3 confirma o total de 480 pares da conciliação. A captura 1 mostra a
 
 ## Investigação de dois casos
 
-Foram selecionados intencionalmente dois tipos de exceção no Depósito Norte, que teve 37 divergências. Ambos remetem à folha `INV-01-01`, primeira página do [caderno de contagem](Material%20de%20Contagem/caderno-contagem-estoque.pdf). A ficha mostra campo em branco para MAT-0005 e 604 unidades para MAT-0011. As consultas 7 e 8 do [analise.sql](Evidências/Análise/analise.sql) reproduzem a seleção e listam os movimentos para conferir quantidade e corte.
+Foram selecionados intencionalmente dois tipos de exceção no Depósito Norte, que teve 37 divergências. Ambos remetem à folha `INV-01-01`, primeira página do [caderno de contagem](https://github.com/DiegoMendonc/Auditoria-de-Estoque-com-SQL/blob/main/caderno-contagem-estoque.pdf). A ficha mostra campo em branco para MAT-0005 e 604 unidades para MAT-0011. As consultas 7 e 8 do [analise.sql](Evidências/Análise/analise.sql) reproduzem a seleção e listam os movimentos para conferir quantidade e corte.
 
 | Caso | Saldo inicial | Movimento líquido no corte | Saldo esperado | Contagem | Diferença |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -184,7 +190,7 @@ A exportação do DBeaver foi padronizada como uma lista JSON na raiz, com o cam
 | Norte | 240 | 192 | 37 | 11 | 15,42% | 4,58% |
 | Sul | 240 | 193 | 36 | 11 | 15,00% | 4,58% |
 
-Confira MAT-0001 no Norte com contagem zero e classificação Conforme. MAT-0005 no Norte deve aparecer como Pendente na quantidade e na diferença, com saldo esperado 403. MAT-0011 no Norte deve mostrar saldo 607, contagem 604 e diferença -3. A criação e a validação do painel serão concluídas quando esses testes forem executados no aplicativo.
+Confira MAT-0001 no Norte com contagem zero e classificação Conforme. MAT-0005 no Norte deve aparecer como Pendente na quantidade e na diferença, com saldo esperado 403. MAT-0011 no Norte deve mostrar saldo 607, contagem 604 e diferença -3. As evidências das verificações executadas estão relacionadas nas seções seguintes.
 
 ### Evidências do painel no Lovable
 
@@ -219,7 +225,7 @@ As capturas confirmam o filtro Norte, o filtro Falta, a busca MAT-0011 e o retor
 | [24 — Segunda página](Evidências/Validação/24-paginacao-segunda.png) | Exibe o registro 11, MAT-0240, com saldo esperado 727 e contagem pendente. Os indicadores mantêm o total filtrado de 11 registros. |
 | [25 — Detalhes do MAT-0240](Evidências/Validação/25-detalhe-mat0240.png) | Modal com saldo inicial 778, movimento -51, saldo esperado 727, contagem e diferença pendentes e folha INV-02-06. |
 
-Os filtros Sul, Sobra e Sem contagem registrada e a troca de página foram conferidos nas capturas. Conforme o teste relatado, os cliques no material e na folha exibem o modal de detalhes. A captura 25 documenta esse modal e a referência INV-02-06. A consulta à ficha original pode ser feita pelo [caderno de contagem](Material%20de%20Contagem/caderno-contagem-estoque.pdf), na página 12, correspondente a essa folha.
+Os filtros Sul, Sobra e Sem contagem registrada e a troca de página foram conferidos nas capturas. Conforme o teste relatado, os cliques no material e na folha exibem o modal de detalhes. A captura 25 documenta esse modal e a referência INV-02-06. A consulta à ficha original pode ser feita pelo [caderno de contagem](https://github.com/DiegoMendonc/Auditoria-de-Estoque-com-SQL/blob/main/caderno-contagem-estoque.pdf), na página 12, correspondente a essa folha.
 
 ## Relatório de auditoria interna
 
@@ -227,7 +233,7 @@ O [relatório RA-EST-001 em PDF](Relatório%20Final/relatorio-auditoria-estoque.
 
 **Conclusão.** No recorte simulado, o inventário requer melhoria na conciliação e na completude. Foram identificados 385 pares conformes, 73 divergências quantitativas e 22 contagens pendentes. A recontagem, a investigação do corte e o tratamento documentado das pendências sustentariam eventual ajuste. As causas e as perdas efetivas dependem de evidências adicionais.
 
-O relatório inclui a investigação de MAT-0005 e MAT-0011 no Norte, capturas das consultas e do painel, além de ações propostas. Responsáveis por área e prazos são sugestões para a simulação e dependem de acordo com a gestão. A emissão do documento e sua inclusão no projeto foram concluídas. A publicação externa permanece pendente.
+O relatório inclui a investigação de MAT-0005 e MAT-0011 no Norte, capturas das consultas e do painel, além de ações propostas. Responsáveis por área e prazos são sugestões para a simulação e dependem de acordo com a gestão. A emissão do documento e sua inclusão no projeto foram concluídas. O projeto e o painel estão publicados. A divulgação no LinkedIn permanece pendente.
 
 ## Checklist
 
@@ -246,6 +252,6 @@ O relatório inclui a investigação de MAT-0005 e MAT-0011 no Norte, capturas d
 - [x] Conferir o filtro Norte, o filtro Falta, a busca MAT-0011, a limpeza de filtros e a abertura dos detalhes de um item.
 - [x] Conferir os filtros Sul, Sobra e Sem contagem registrada, a troca de página e o modal de detalhes com referência à folha.
 - [x] Elaborar o relatório de auditoria interna em PDF e incluí-lo no README.
-- [ ] Publicar o projeto e o painel e compartilhar um resumo no LinkedIn.
+- [x] Publicar o projeto no GitHub e o painel no Lovable.\n- [ ] Compartilhar um resumo do projeto no LinkedIn.
 
 As Normas Globais de Auditoria Interna do IIA orientam a estrutura do exercício, em especial objetivos e escopo (13.3), critérios (13.4), documentação (14.6) e comunicação final (15.1).
