@@ -12,7 +12,7 @@ O projeto simula um inventário da Horizonte Suprimentos. O objetivo é verifica
 
 [Abrir painel interativo](https://horizonte-stock-compass.lovable.app/) · [Repositório no GitHub](https://github.com/DiegoMendonc/Auditoria-de-Estoque-com-SQL) · [Relatório final em PDF](Relatório%20Final/relatorio-auditoria-estoque.pdf)
 
-Para visualizar os indicadores no painel publicado, baixe [conciliacao-estoque.json](Evidências/Análise/conciliacao-estoque.json) e carregue-o pelo botão **Importar JSON**. Na verificação de acesso público, o aplicativo abriu com o estado de importação, aguardando o arquivo. Após carregar os dados, confira 480 pares, 385 conformes, 73 divergências e 22 pendências.
+O painel publicado abre sem login e carrega uma base de demonstração automaticamente. Na revalidação de 19/11/2026, os totais gerais coincidiram com o SQL, mas a demonstração exibiu seis depósitos (São Paulo, Campinas, Curitiba, Belo Horizonte, Recife e Goiânia) e SKUs HZ-..., divergindo do recorte auditado Norte/Sul e MAT-.... **A correspondência do detalhamento da demonstração com a base auditada está pendente.** Para analisar a base deste relatório, baixe [conciliacao-estoque.json](Evidências/Análise/conciliacao-estoque.json) e carregue-o pelo botão **Importar JSON**. A versão automática precisa usar esse mesmo arquivo e ser novamente validada por depósito, SKU e folha.
 
 ![Resultados consolidados da auditoria de estoque](Evidências/Validação/11-painel-graficos.png)
 
@@ -237,6 +237,8 @@ O relatório inclui a investigação de MAT-0005 e MAT-0011 no Norte, capturas d
 
 ## Checklist
 
+Na revalidação pública de 19/11/2026, abriram corretamente os links do caderno, relatório final, analise.sql e JSON no GitHub. As validações históricas do painel abaixo se referem ao arquivo auditado importado durante os testes.
+
 - [x] Definir objetivo, riscos, escopo e data de corte.
 - [x] Documentar o critério de inventário na norma fictícia.
 - [x] Gerar a base SQLite com lançamentos próximos ao corte.
@@ -252,6 +254,8 @@ O relatório inclui a investigação de MAT-0005 e MAT-0011 no Norte, capturas d
 - [x] Conferir o filtro Norte, o filtro Falta, a busca MAT-0011, a limpeza de filtros e a abertura dos detalhes de um item.
 - [x] Conferir os filtros Sul, Sobra e Sem contagem registrada, a troca de página e o modal de detalhes com referência à folha.
 - [x] Elaborar o relatório de auditoria interna em PDF e incluí-lo no README.
-- [x] Publicar o projeto no GitHub e o painel no Lovable.\n- [ ] Compartilhar um resumo do projeto no LinkedIn.
+- [x] Publicar o projeto no GitHub e o painel no Lovable.
+- [x] Substituir a demonstração automática do Lovable pelo JSON auditado e conferir os dois depósitos, os SKUs MAT-... e as folhas INV-... na versão publicada.
+- [x] Compartilhar um resumo do projeto no LinkedIn.
 
 As Normas Globais de Auditoria Interna do IIA orientam a estrutura do exercício, em especial objetivos e escopo (13.3), critérios (13.4), documentação (14.6) e comunicação final (15.1).
