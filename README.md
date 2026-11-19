@@ -233,7 +233,7 @@ O [relatório RA-EST-001 em PDF](Relatório%20Final/relatorio-auditoria-estoque.
 
 **Conclusão.** No recorte simulado, o inventário requer melhoria na conciliação e na completude. Foram identificados 385 pares conformes, 73 divergências quantitativas e 22 contagens pendentes. A recontagem, a investigação do corte e o tratamento documentado das pendências sustentariam eventual ajuste. As causas e as perdas efetivas dependem de evidências adicionais.
 
-O relatório inclui a investigação de MAT-0005 e MAT-0011 no Norte, capturas das consultas e do painel, além de ações propostas. Responsáveis por área e prazos são sugestões para a simulação e dependem de acordo com a gestão. A emissão do documento e sua inclusão no projeto foram concluídas. O projeto e o painel estão publicados. A divulgação no LinkedIn permanece pendente.
+O relatório inclui a investigação de MAT-0005 e MAT-0011 no Norte, capturas das consultas e do painel, além de ações propostas. Responsáveis por área e prazos são sugestões para a simulação e dependem de acordo com a gestão. A emissão do documento e sua inclusão no projeto foram concluídas. O projeto e o painel estão publicados.
 
 ## Checklist
 
