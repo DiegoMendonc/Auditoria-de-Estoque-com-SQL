@@ -12,7 +12,7 @@ O projeto simula um inventário da Horizonte Suprimentos. O objetivo é verifica
 
 [Abrir painel interativo](https://horizonte-stock-compass.lovable.app/) · [Repositório no GitHub](https://github.com/DiegoMendonc/Auditoria-de-Estoque-com-SQL) · [Relatório final em PDF](Relatório%20Final/relatorio-auditoria-estoque.pdf)
 
-O painel publicado abre sem login e carrega uma base de demonstração automaticamente. Na revalidação de 19/11/2026, os totais gerais coincidiram com o SQL, mas a demonstração exibiu seis depósitos (São Paulo, Campinas, Curitiba, Belo Horizonte, Recife e Goiânia) e SKUs HZ-..., divergindo do recorte auditado Norte/Sul e MAT-.... **A correspondência do detalhamento da demonstração com a base auditada está pendente.** Para analisar a base deste relatório, baixe [conciliacao-estoque.json](Evidências/Análise/conciliacao-estoque.json) e carregue-o pelo botão **Importar JSON**. A versão automática precisa usar esse mesmo arquivo e ser novamente validada por depósito, SKU e folha.
+O painel publicado abre sem login e carrega automaticamente 480 registros fictícios. Na revalidação de 19/11/2026, os totais gerais e os indicadores por depósito coincidiram com a análise SQL: Norte com 240 pares e 37 divergências; Sul com 240 pares e 36 divergências. Também foram conferidos MAT-0001 (saldo zero), MAT-0005 (contagem pendente) e MAT-0011 nos dois depósitos, incluindo saldos, diferenças e referências de folha. A verificação pública cobriu os indicadores e esses casos de referência, sem comparação exaustiva dos 480 registros. Para substituir a base exibida, utilize o botão **Importar JSON** com [conciliacao-estoque.json](Evidências/Análise/conciliacao-estoque.json).
 
 ![Resultados consolidados da auditoria de estoque](Evidências/Validação/11-painel-graficos.png)
 
@@ -255,7 +255,7 @@ Na revalidação pública de 19/11/2026, abriram corretamente os links do cadern
 - [x] Conferir os filtros Sul, Sobra e Sem contagem registrada, a troca de página e o modal de detalhes com referência à folha.
 - [x] Elaborar o relatório de auditoria interna em PDF e incluí-lo no README.
 - [x] Publicar o projeto no GitHub e o painel no Lovable.
-- [x] Substituir a demonstração automática do Lovable pelo JSON auditado e conferir os dois depósitos, os SKUs MAT-... e as folhas INV-... na versão publicada.
+- [x] Conferir a demonstração automática publicada: totais, depósitos Norte/Sul e casos de referência com SKUs MAT-... e folhas INV-....
 - [x] Compartilhar um resumo do projeto no LinkedIn.
 
 As Normas Globais de Auditoria Interna do IIA orientam a estrutura do exercício, em especial objetivos e escopo (13.3), critérios (13.4), documentação (14.6) e comunicação final (15.1).
